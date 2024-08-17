@@ -1,0 +1,63 @@
+SELECT * FROM cheese_production 
+UPDATE cheese_production SET value = REPLACE(value, ',', '')
+
+SELECT * FROM honey_production 
+UPDATE honey_production SET value = REPLACE(value, ',', '')
+
+SELECT * FROM milk_production 
+UPDATE milk_production SET value = REPLACE(value, ',', '')
+
+SELECT * FROM coffee_production
+UPDATE coffee_production SET value = REPLACE(value, ',', '')
+
+SELECT * FROM egg_production
+UPDATE egg_production SET value = REPLACE(value, ',', '')
+
+SELECT * FROM state_lookup
+
+SELECT * FROM yogurt_production
+UPDATE yogurt_production SET value = REPLACE(value, ',', '')
+
+-- 1. Find the total milk production for the year 2023.
+SELECT SUM(Value) 
+FROM milk_production 
+WHERE "Year" = 2023
+-- A: 91812000000
+
+-- 2. Show coffee production data for the year 2015. What is the total value?
+SELECT SUM(Value)
+FROM coffee_production 
+WHERE YEAR = 2015
+-- A: 6600000
+
+-- 3. Find the average honey production for the year 2022.
+SELECT AVG(Value)
+FROM honey_production 
+WHERE "Year" = 2022
+-- A: 3133275.0
+
+-- 4. Get the state names with their corresponding ANSI codes from the state_lookup table. What number is Iowa?
+SELECT * FROM state_lookup 
+WHERE State = "IOWA"
+-- A: 19
+
+-- 5. Find the highest yogurt production value for the year 2022.
+SELECT MAX(Value) 
+FROM yogurt_production  
+WHERE "Year" = 2022
+-- A: 793,256,000
+
+-- 6. Find states where both honey and milk were produced in 2022. Did State_ANSI "35" produce both honey and milk in 2022?
+SELECT DISTINCT(mp.State_ANSI)
+FROM milk_production mp INNER JOIN honey_production hp ON mp.State_ANSI = hp.State_ANSI, state_lookup 
+WHERE mp.YEAR=2022 AND hp."Year"=2022
+ORDER BY mp.State_ANSI ASC
+-- A: No
+
+-- 7. Find the total yogurt production for states that also produced cheese in 2022.
+SELECT SUM(yp.Value)
+FROM cheese_production cp INNER JOIN yogurt_production yp ON cp.State_ANSI = yp.State_ANSI 
+WHERE cp."Year" = 2022 AND yp."Year" = 2022
+-- A: 1171095000
+
+
